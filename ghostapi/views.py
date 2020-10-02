@@ -27,24 +27,20 @@ class RoastBoastViewSets(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def upvote(self, request, pk=None):
-        post = RoastBoastModel.objects.get(id=pk)
-        serializer = RoastBoastSerializer(data=request.data)
-        if serializer.is_valid():
-            post.upvote = post.upvote + 1
-            post.totoal_vote = post.total_vote + 1
-            post.save()
-            return Response({'status': 'upvote added'})
+        post = self.get_object()
+        post.upvote = post.upvote + 1
+        post.total_vote = post.total_vote + 1
+        post.save()
+        return Response({'status': 'upvote added'})
 
 
     @action(detail=True, methods=['post'])
     def downvote(self, request, pk=None):
-        post = RoastBoastModel.objects.get(id=pk)
-        serializer = RoastBoastSerializer(data=request.data)
-        if serializer.is_valid():
-            post.downvote = post.upvote - 1
-            post.totoal_vote = post.total_vote - 1
-            post.save()
-            return Response({'status': 'downvote added'})
+        post = self.get_object()
+        post.downvote = post.upvote - 1
+        post.total_vote = post.total_vote - 1
+        post.save()
+        return Response({'status': 'downvote added'})
 
 
     @action(detail=True, methods=['post'])
@@ -54,7 +50,7 @@ class RoastBoastViewSets(viewsets.ModelViewSet):
         if serializer.is_valid():
             post.create_post(serializer.data['body', 'choices'])
             post.save()
-            return Response({'status': 'post created'})
+        return Response({'status': 'post created'})
 
 
             
